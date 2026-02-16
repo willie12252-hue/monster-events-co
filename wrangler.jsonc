@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developers.cloudflare.com/wrangler/schema.json",
+  "name": "monster-events-co",
+  "compatibility_date": "2026-02-16",
+  "assets": {
+    "directory": "./dist"
+  }
+}
