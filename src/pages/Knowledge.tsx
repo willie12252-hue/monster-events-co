@@ -48,8 +48,8 @@ export default function Knowledge() {
     } catch (err) {
             console.error("[newsletter] supabase insert failed", err);
     }
-    
-    const subscribe = async () => {}    toast.success("已完成訂閱！");
+toast.success("已完成訂閱！");
+
   };
 
   const normalizedCats = useMemo(() => {
