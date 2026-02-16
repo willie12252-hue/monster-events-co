@@ -30,7 +30,7 @@ export default function Knowledge() {
   const [consent, setConsent] = useState(true);
   const emailOk = useMemo(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()), [email]);
 
-  const subscribe = () => {
+  const subscribe = async () => {
     const e = email.trim().toLowerCase();
     if (!newsletter?.enabled) return;
     if (!consent) return toast.error("請先勾選同意接收電子報");
@@ -42,7 +42,14 @@ export default function Knowledge() {
     const next = [{ email: e, createdAt: new Date().toISOString(), source: "knowledge" }, ...(newsletterSubscribers ?? [])];
     setData({ ...data, newsletterSubscribers: next } as any);
     setEmail("");
-    toast.success("已完成訂閱！");
+    try {
+            const { insertNewsletterSubscriber } = await import("@/lib/supabase-store");
+                  await insertNewsletterSubscriber({ email: e, source: "knowledge" });
+    } catch (err) {
+            console.error("[newsletter] supabase insert failed", err);
+    }
+    
+    const subscribe = async () => {}    toast.success("已完成訂閱！");
   };
 
   const normalizedCats = useMemo(() => {
