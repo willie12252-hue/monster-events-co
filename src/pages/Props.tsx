@@ -132,7 +132,8 @@ export default function Props() {
                 <SelectItem value="all">全部分類</SelectItem>
                 {(Object.keys(categoryMeta) as PropCategoryKey[]).map((k) => (
                   <SelectItem key={k} value={k}>
-                    {categoryMeta[k].label}
+                    {categoryMeta[k]?.label ?? String(k)
+}
                   </SelectItem>
                 ))}
               </SelectContent>

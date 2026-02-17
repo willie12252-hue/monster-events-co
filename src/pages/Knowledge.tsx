@@ -290,7 +290,7 @@ toast.success("已完成訂閱！");
                             : "border-border/60 bg-background/10 text-muted-foreground hover:border-accent/40 hover:text-foreground")
                         }
                       >
-                        <span className="font-display">{c.label}</span>
+                        <span className="font-display">{String((c as any)?.label ?? "")}</span>
                         <span className="inline-flex min-w-8 items-center justify-center rounded-full bg-background/30 px-2 py-1 text-xs text-muted-foreground">
                           {c.count}
                         </span>
