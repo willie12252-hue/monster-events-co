@@ -1,4 +1,6 @@
-import SiteLayout from "@/components/SiteLayout";
+i
+
+mport SiteLayout from "@/components/SiteLayout";
 import PageBanner from "@/components/PageBanner";
 import banner from "@/assets/banner-knowledge-lab.webp";
 import NextStepCTA from "@/components/NextStepCTA";
@@ -12,7 +14,9 @@ import { Link } from "wouter";
 import { ArrowRight, Search, Tag } from "lucide-react";
 import { motion } from "framer-motion";
 import { reveal, stagger } from "@/lib/motion";
-import { useMemo, useState } from "react";
+import { useMemo,
+   
+  useState } from "react";
 import { toast } from "sonner";
 import hero from "@/assets/hero.webp";
 import pattern from "@/assets/pattern.webp";
@@ -182,7 +186,7 @@ toast.success("已完成訂閱！");
                                     {a.category || "未分類"}
                                   </Badge>
                                   <div className="text-xs text-muted-foreground">{a.date}</div>
-                                  <div className="text-xs text-muted-foreground">FAQ：{a.faq.length} 題</div>
+                                  <div className="text-xs text-muted-foreground">FAQ：{(a.faq ?? []).length} 題</div>
                                 </div>
 
                                 <div className="mt-3 font-display text-2xl leading-snug">{a.title}</div>
