@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { useAppData } from "@/contexts/DataContext";
 import { buildQuoteEmailMessage, canSendEmail, sendEmailJs } from "@/lib/emailjs";
-import { NextStepCTA } from "@/components/NextStepCTA";
+import NextStepCTA from "@/components/NextStepCTA";
 import { isValidEmail, isValidPhone } from "@/lib/validate";
 import { MessageCircle, Phone, Mail, ShieldAlert, MapPin, Printer } from "lucide-react";
 import lineQr from "@/assets/line-qr.webp";
@@ -73,7 +73,7 @@ export default function Contact() {
       return;
     }
 
-    if (!canSendEmail()) {
+    if (!canSendEmail(data.emailJs)) {
       toast.error("發送次數已達上限，請稍後再試或直接聯繫我們。");
       return;
     }
@@ -84,7 +84,8 @@ export default function Contact() {
       const outAtStr = outDate ? (outDate + " " + (outTime || "00:00")) : "";
       const locationStr = city ? (city + (district || "") + (address || "")) : address;
 
-      const message = buildQuoteEmailMessage({
+      const payloadBase = {
+        source: "contact" as const,
         company,
         vat,
         name,
@@ -95,14 +96,19 @@ export default function Contact() {
         outAt: outAtStr,
         location: locationStr,
         need,
-        note,
-      });
-
-      await sendEmailJs({
-        from_name: name,
-        company_name: company,
-        message,
+        memo: note,
+        createdAtIso: new Date().toISOString(),
+        pageUrl: window.location.href,
         reply_to: email,
+        from_name: name,
+      };
+
+      const message = buildQuoteEmailMessage(payloadBase);
+
+      await sendEmailJs(data.emailJs, {
+        ...payloadBase,
+        message,
+        subject: "[需求表單] " + company + " - " + name,
       });
 
       toast.success("發送成功！我們將盡快與您聯繫。");
@@ -130,8 +136,13 @@ export default function Contact() {
   };
 
   return (
-    <SiteLayout title="聯絡怪獸">
-      <PageBanner title="聯絡怪獸" banner={banner} />
+    <SiteLayout>
+      <PageBanner 
+        image={banner} 
+        kicker="立即諮詢"
+        title="聯絡怪獸" 
+        subtitle="請填寫以下資訊，我們將在 24 小時內回覆您的需求。"
+      />
 
       <div className="bg-slate-50 py-12 lg:py-20">
         <div className="container mx-auto px-4 lg:px-6">
