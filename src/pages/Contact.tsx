@@ -7,6 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useAppData } from "@/contexts/DataContext";
 import { buildQuoteEmailMessage, canSendEmail, sendEmailJs } from "@/lib/emailjs";
@@ -14,7 +15,7 @@ import NextStepCTA from "@/components/NextStepCTA";
 import { isValidEmail, isValidPhone } from "@/lib/validate";
 import { MessageCircle, Phone, Mail, ShieldAlert, MapPin, Printer } from "lucide-react";
 import lineQr from "@/assets/line-qr.webp";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export default function Contact() {
   const { data } = useAppData();
@@ -24,15 +25,35 @@ export default function Contact() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [eventName, setEventName] = useState("");
-  const [inAt, setInAt] = useState("");
-  const [outAt, setOutAt] = useState("");
-  const [location, setLocation] = useState("");
+  
+  const [inDate, setInDate] = useState("");
+  const [inTime, setInTime] = useState("");
+  const [outDate, setOutDate] = useState("");
+  const [outTime, setOutTime] = useState("");
+
+  const [city, setCity] = useState("");
+  const [district, setDistrict] = useState("");
+  const [address, setAddress] = useState("");
+
   const [need, setNeed] = useState("");
   const [note, setNote] = useState("");
-  const [prop, setProp] = useState("");
-  const [date, setDate] = useState("");
 
   const [sending, setSending] = useState(false);
+
+  const TIME_OPTIONS = useMemo(() => {
+    const out: string[] = [];
+    for (let h = 0; h < 24; h++) {
+      for (const m of ["00", "15", "30", "45"]) out.push(`${String(h).padStart(2, "0")}:${m}`);
+    }
+    return out;
+  }, []);
+
+  const CITY_OPTIONS = [
+    "台北市", "新北市", "桃園市", "台中市", "台南市", "高雄市",
+    "基隆市", "新竹市", "新竹縣", "苗栗縣", "彰化縣", "南投縣", "雲林縣",
+    "嘉義市", "嘉義縣", "屏東縣", "宜蘭縣", "花蓮縣", "台東縣",
+    "澎湖縣", "金門縣", "連江縣",
+  ];
 
   const submit = async () => {
     if (!company.trim() || !name.trim() || (!phone.trim() && !email.trim())) {
@@ -56,6 +77,10 @@ export default function Contact() {
     setSending(true);
     try {
       const createdAtIso = new Date().toISOString();
+      const inAt = [inDate, inTime].filter(Boolean).join(" ");
+      const outAt = [outDate, outTime].filter(Boolean).join(" ");
+      const location = [city, district, address].filter(Boolean).join(" ");
+
       const base = {
         source: "contact" as const,
         company,
@@ -81,21 +106,24 @@ export default function Contact() {
         message: buildQuoteEmailMessage({ ...base, lines: [] }),
       });
 
-      toast.success("已送出，已寄送到信箱。\n預計 1 個工作天內回覆。", { duration: 5000 });
+      toast.success("已送出，已寄送到信箱。
+預計 1 個工作天內回覆。", { duration: 5000 });
 
       setCompany("");
-    setVat("");
-    setName("");
-    setPhone("");
-    setEmail("");
-    setEventName("");
-    setInAt("");
-    setOutAt("");
-    setLocation("");
-    setNeed("");
-    setNote("");
-    setProp("");
-      setDate("");
+      setVat("");
+      setName("");
+      setPhone("");
+      setEmail("");
+      setEventName("");
+      setInDate("");
+      setInTime("");
+      setOutDate("");
+      setOutTime("");
+      setCity("");
+      setDistrict("");
+      setAddress("");
+      setNeed("");
+      setNote("");
     } catch {
       toast.error("送出失敗：EmailJS 寄信錯誤。請確認 Service/Template/收件信箱設定。", { duration: 6000 });
     } finally {
@@ -189,11 +217,70 @@ export default function Contact() {
               </div>
               <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="5. EMAIL（擇一）" />
               <Input value={eventName} onChange={(e) => setEventName(e.target.value)} placeholder="6. 活動名稱" />
-              <div className="grid gap-3 md:grid-cols-2">
-                <Input value={inAt} onChange={(e) => setInAt(e.target.value)} placeholder="7. 進場日期跟時間（例：2026/03/01 13:00）" />
-                <Input value={outAt} onChange={(e) => setOutAt(e.target.value)} placeholder="8. 撤除日期跟時間（例：2026/03/01 20:00）" />
+              
+              <div className="rounded-xl border border-border/70 bg-background/20 p-4">
+                <div className="font-display text-foreground text-sm">7–8. 進撤場時間</div>
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  <div className="grid gap-2">
+                    <div className="text-xs text-muted-foreground">進場</div>
+                    <div className="grid gap-2 md:grid-cols-2">
+                      <Input value={inDate} onChange={(e) => setInDate(e.target.value)} type="date" />
+                      <Select value={inTime} onValueChange={setInTime}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="時間" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {TIME_OPTIONS.map((t) => (
+                            <SelectItem key={t} value={t}>
+                              {t}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="grid gap-2">
+                    <div className="text-xs text-muted-foreground">撤場</div>
+                    <div className="grid gap-2 md:grid-cols-2">
+                      <Input value={outDate} onChange={(e) => setOutDate(e.target.value)} type="date" />
+                      <Select value={outTime} onValueChange={setOutTime}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="時間" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {TIME_OPTIONS.map((t) => (
+                            <SelectItem key={t} value={t}>
+                              {t}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 text-[10px] text-muted-foreground text-center">不確定也可先留空；我們會再協助確認。</div>
               </div>
-              <Input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="9. 活動地點" />
+
+              <div className="rounded-xl border border-border/70 bg-background/20 p-4">
+                <div className="font-display text-foreground text-sm">9. 活動地點</div>
+                <div className="mt-3 grid gap-2 md:grid-cols-3">
+                  <Select value={city} onValueChange={setCity}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="縣市" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CITY_OPTIONS.map((c) => (
+                        <SelectItem key={c} value={c}>
+                          {c}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input value={district} onChange={(e) => setDistrict(e.target.value)} placeholder="區/鄉鎮（選填）" />
+                  <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="地址/場館（選填）" />
+                </div>
+              </div>
+
               <Textarea
                 value={need}
                 onChange={(e) => setNeed(e.target.value)}
