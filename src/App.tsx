@@ -25,6 +25,7 @@ import ScrollToTopOnRouteChange from "@/components/ScrollToTopOnRouteChange";
 function AppRouter() {
   return (
     <Router hook={useHashLocation}>
+      <ScrollToTopOnRouteChange />
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/props" component={Props} />
@@ -53,7 +54,6 @@ function App() {
             <QuoteProvider>
               <Toaster />
               <AnalyticsTracker />
-              <ScrollToTopOnRouteChange />
               <AppRouter />
             </QuoteProvider>
           </DataProvider>
