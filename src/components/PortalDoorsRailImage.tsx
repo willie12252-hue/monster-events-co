@@ -75,7 +75,7 @@ export default function PortalDoorsRailImage({
   const xMv = useMotionValue(0.5);
   const x = useSpring(xMv, { stiffness: 280, damping: 28, mass: 0.6 });
   const [active, setActive] = useState(0);
-  const leftPct = useTransform(x, (v) => `${v * 100}%`);
+  const leftPct = useTransform(x, (v: number) => `${v * 100}%`);
 
   const onMove: React.MouseEventHandler<HTMLDivElement> = (e) => {
     const el = wrapRef.current;
