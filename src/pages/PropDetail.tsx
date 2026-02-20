@@ -33,7 +33,7 @@ export default function PropDetail({ slug }: { slug: string }) {
   const { data, setData } = useAppData();
   const { props: propsData, categoryMeta } = data as any;
 
-  const prop = (propsData as any[]).find((p) => p.slug === slug && (p.status ?? "public") === "public");
+  const prop = ((propsData ?? []) as any[]).find((p) => p.slug === slug && (p.status ?? "public") === "public");
   const bumpedRef = useRef<string | null>(null);
   const { addLine } = useQuote();
 
@@ -86,7 +86,7 @@ export default function PropDetail({ slug }: { slug: string }) {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker={categoryMeta[prop.category].label}
+        kicker={categoryMeta?.[prop.category]?.label ?? "未分類"}
         title={prop.name}
         subtitle={prop.summary}
       />
@@ -98,7 +98,7 @@ export default function PropDetail({ slug }: { slug: string }) {
             </Link>
           </Button>
           <Badge variant="secondary" className="bg-background/30">
-            {categoryMeta[prop.category].label}
+            {categoryMeta?.[prop.category]?.label ?? "未分類"}
           </Badge>
           {prop.tags.map((t) => (
             <Badge key={t} variant="outline" className="border-border/70">
