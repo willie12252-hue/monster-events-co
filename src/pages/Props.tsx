@@ -69,36 +69,39 @@ export default function Props() {
 
   const list = useMemo(() => {
     const term = q.trim().toLowerCase();
-    return propsData
+    return (propsData || [])
       .map((p: any, idx: number) => ({ ...p, order: typeof p.order === "number" ? p.order : idx }))
-      .filter((p: any) => (p.status ?? "public") === "public")
-      .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0))
-      .filter((p: any) => (cat === "all" ? true : p.category === cat))
+      .filter((p: any) => (p?.status ?? "public") === "public")
+      .sort((a: any, b: any) => (a?.order ?? 0) - (b?.order ?? 0))
+      .filter((p: any) => (cat === "all" ? true : p?.category === cat))
       .filter((p: any) => {
         if (!term) return true;
-        const hay = `${p.name} ${p.summary} ${(p.tags ?? []).join(" ")}`.toLowerCase();
+        const hay = `${p?.name || ''} ${p?.summary || ''} ${(p?.tags ?? []).join(" ")}`.toLowerCase();
         return hay.includes(term);
       });
   }, [q, cat, propsData]);
 
   const specBadges = (p: PropItem) => {
-    const powerLabel = p.quick.power === "need" ? "需用電" : p.quick.power === "none" ? "不需用電" : "可選用電";
+    // 加上極致的防禦性編程 (Defensive Programming)
+    const powerLabel = p?.quick?.power === "need" ? "需用電" : p?.quick?.power === "none" ? "不需用電" : "可選用電/未標示";
     const powerIcon = <Zap className="h-3.5 w-3.5" />;
-    const venueLabel = p.quick.venue === "indoor" ? "室內" : p.quick.venue === "outdoor" ? "戶外" : "室內/戶外";
+    const venueLabel = p?.quick?.venue === "indoor" ? "室內" : p?.quick?.venue === "outdoor" ? "戶外" : "室內/戶外";
     return (
       <div className="mt-4 flex flex-wrap gap-2">
         <Badge variant="secondary" className="bg-background/30">
           {powerIcon} <span className="ml-1">{powerLabel}</span>
         </Badge>
         <Badge variant="secondary" className="bg-background/30">
-          <Users className="h-3.5 w-3.5" /> <span className="ml-1">{p.quick.crew} 人</span>
+          <Users className="h-3.5 w-3.5" /> <span className="ml-1">{p?.quick?.crew ?? 1} 人</span>
         </Badge>
         <Badge variant="secondary" className="bg-background/30">
           <DoorOpen className="h-3.5 w-3.5" /> <span className="ml-1">{venueLabel}</span>
         </Badge>
-        <Badge variant="secondary" className="bg-background/30">
-          <Ruler className="h-3.5 w-3.5" /> <span className="ml-1">{formatFootprint(p.quick.footprint)}</span>
-        </Badge>
+        {p?.quick?.footprint && (
+          <Badge variant="secondary" className="bg-background/30">
+            <Ruler className="h-3.5 w-3.5" /> <span className="ml-1">{formatFootprint(p.quick.footprint)}</span>
+          </Badge>
+        )}
       </div>
     );
   };
@@ -130,10 +133,9 @@ export default function Props() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">全部分類</SelectItem>
-                {(Object.keys(categoryMeta) as PropCategoryKey[]).map((k) => (
+                {(Object.keys(categoryMeta || {}) as PropCategoryKey[]).map((k) => (
                   <SelectItem key={k} value={k}>
-                    {categoryMeta[k]?.label ?? String(k)
-}
+                    {categoryMeta?.[k]?.label ?? String(k)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -152,11 +154,11 @@ export default function Props() {
                   <ShieldAlert className="h-6 w-6 text-accent" /> {guide.title}
                 </div>
                 <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                  {guide.intro.map((p) => (
+                  {(guide.intro || []).map((p: string) => (
                     <p key={p}>{p}</p>
                   ))}
                   <div className="mt-1 flex flex-wrap gap-2">
-                    {guide.bestFor.map((b) => (
+                    {(guide.bestFor || []).map((b: string) => (
                       <span
                         key={b}
                         className="rounded-full border border-border/70 bg-background/20 px-3 py-1 text-xs"
@@ -168,7 +170,7 @@ export default function Props() {
                 </div>
 
                 <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
-                  {guide.rentNotes.map((t) => (
+                  {(guide.rentNotes || []).map((t: string) => (
                     <div key={t} className="rounded-xl border border-border/70 bg-background/20 p-4">
                       <div className="flex gap-3">
                         <span className="mt-2 h-2 w-2 rounded-full bg-accent" />
@@ -203,8 +205,8 @@ export default function Props() {
                 <div className="font-display text-2xl">常見問題（FAQ）</div>
                 <p className="mt-2 text-sm text-muted-foreground">把客戶最常問的先回答，溝通成本會下降很多。</p>
                 <Accordion type="single" collapsible className="mt-4">
-                  {guide.faq.map((f, i) => (
-                    <AccordionItem key={f.q} value={`q${i}`}
+                  {(guide.faq || []).map((f: any, i: number) => (
+                    <AccordionItem key={f.q || i} value={`q${i}`}
                       className="border-border/70">
                       <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
                       <AccordionContent className="text-sm text-muted-foreground">{f.a}</AccordionContent>
@@ -221,12 +223,12 @@ export default function Props() {
           )}
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {list.map((p) => (
-            <Card key={p.id} className="group overflow-hidden border-border/70 bg-card/40">
+          {list.map((p: any) => (
+            <Card key={p.id || Math.random()} className="group overflow-hidden border-border/70 bg-card/40">
               <div className="aspect-[16/9] overflow-hidden border-b border-border/70 bg-background/20">
                 <img
                   src={p.thumbnail || fallbackThumb(p.heroImage)}
-                  alt={p.name}
+                  alt={p.name || "道具"}
                   className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-[1.02]"
                   loading="lazy"
                 />
@@ -235,24 +237,24 @@ export default function Props() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="text-xs tracking-widest text-muted-foreground">{categoryMeta?.[p.category]?.label ?? "未分類"}</div>
-                  <div className="mt-2 font-display text-xl">{p.name}</div>
+                  <div className="mt-2 font-display text-xl">{p.name || "未命名道具"}</div>
                 </div>
                 <div className="text-accent transition group-hover:translate-x-1">
                   <ArrowRight className="h-5 w-5" />
                 </div>
               </div>
 
-              <div className="mt-3 text-sm text-muted-foreground">{p.summary}</div>
+              <div className="mt-3 text-sm text-muted-foreground">{p.summary || "尚無簡介。"}</div>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                {p.tags.map((t) => (
+                {(p.tags || []).map((t: string) => (
                   <Badge key={t} variant="secondary" className="bg-background/30">
                     {t}
                   </Badge>
                 ))}
               </div>
 
-              {specBadges(p) }
+              {specBadges(p)}
 
               <div className="mt-5">
                 <Button asChild className="w-full">
