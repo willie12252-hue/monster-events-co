@@ -199,7 +199,7 @@ export default function SiteLayout({
                 </li>
                 <li className="flex items-center gap-3 text-muted-foreground">
                   <Mail className="h-4 w-4" />
-                  <span>willie12252@yahoo.com.tw</span>
+                  <span>willie1225@gmail.com</span>
                 </li>
                 <li className="pt-4">
                   <div className="bg-background p-3 rounded-xl border border-primary/10 inline-block">
