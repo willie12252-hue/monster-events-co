@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { useAppData } from "@/contexts/DataContext";
 import { buildQuoteEmailMessage, canSendEmail, sendEmailJs } from "@/lib/emailjs";
-import NextStepCTA from "@/components/NextStepCTA";
+import { NextStepCTA } from "@/components/NextStepCTA";
 import { isValidEmail, isValidPhone } from "@/lib/validate";
 import { MessageCircle, Phone, Mail, ShieldAlert, MapPin, Printer } from "lucide-react";
 import lineQr from "@/assets/line-qr.webp";
@@ -25,7 +25,7 @@ export default function Contact() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [eventName, setEventName] = useState("");
-  
+
   const [inDate, setInDate] = useState("");
   const [inTime, setInTime] = useState("");
   const [outDate, setOutDate] = useState("");
@@ -43,7 +43,9 @@ export default function Contact() {
   const TIME_OPTIONS = useMemo(() => {
     const out: string[] = [];
     for (let h = 0; h < 24; h++) {
-      for (const m of ["00", "15", "30", "45"]) out.push(`${String(h).padStart(2, "0")}:${m}`);
+      for (const m of ["00", "15", "30", "45"]) {
+        out.push(String(h).padStart(2, "0") + ":" + m);
+      }
     }
     return out;
   }, []);
@@ -52,7 +54,7 @@ export default function Contact() {
     "台北市", "新北市", "桃園市", "台中市", "台南市", "高雄市",
     "基隆市", "新竹市", "新竹縣", "苗栗縣", "彰化縣", "南投縣", "雲林縣",
     "嘉義市", "嘉義縣", "屏東縣", "宜蘭縣", "花蓮縣", "台東縣",
-    "澎湖縣", "金門縣", "連江縣",
+    "澎湖縣", "金門縣", "連江縣"
   ];
 
   const submit = async () => {
@@ -60,55 +62,50 @@ export default function Contact() {
       toast.error("請至少填寫：公司名稱、聯絡人，以及連絡電話或 EMAIL");
       return;
     }
+
     if (email.trim() && !isValidEmail(email)) {
-      toast.error("EMAIL 格式似乎不正確");
-      return;
-    }
-    if (phone.trim() && !isValidPhone(phone)) {
-      toast.error("連絡電話格式似乎不正確");
+      toast.error("請輸入正確的 EMAIL 格式");
       return;
     }
 
-    if (!canSendEmail(data.emailjs)) {
-      toast.error("尚未設定 EmailJS（缺 template id）。請到後台補上 Template ID 後再測試寄信。", { duration: 6000 });
+    if (phone.trim() && !isValidPhone(phone)) {
+      toast.error("請輸入正確的電話格式");
+      return;
+    }
+
+    if (!canSendEmail()) {
+      toast.error("發送次數已達上限，請稍後再試或直接聯繫我們。");
       return;
     }
 
     setSending(true);
     try {
-      const createdAtIso = new Date().toISOString();
-      const inAt = [inDate, inTime].filter(Boolean).join(" ");
-      const outAt = [outDate, outTime].filter(Boolean).join(" ");
-      const location = [city, district, address].filter(Boolean).join(" ");
+      const inAtStr = inDate ? (inDate + " " + (inTime || "00:00")) : "";
+      const outAtStr = outDate ? (outDate + " " + (outTime || "00:00")) : "";
+      const locationStr = city ? (city + (district || "") + (address || "")) : address;
 
-      const base = {
-        source: "contact" as const,
+      const message = buildQuoteEmailMessage({
         company,
         vat,
         name,
         phone,
         email,
         eventName,
-        inAt,
-        outAt,
-        location,
+        inAt: inAtStr,
+        outAt: outAtStr,
+        location: locationStr,
         need,
-        memo: note,
-        pageUrl: typeof window !== "undefined" ? window.location.href : "",
-        createdAtIso,
-      };
-
-      await sendEmailJs(data.emailjs, {
-        ...base,
-        from_name: name || company || "網站表單",
-        reply_to: email || "",
-        subject: `【怪獸道具工廠】需求表單｜${company || "未填公司"}｜${name || "未填聯絡人"}`,
-        message: buildQuoteEmailMessage({ ...base, lines: [] }),
+        note,
       });
 
-      toast.success("已送出，已寄送到信箱。
-預計 1 個工作天內回覆。", { duration: 5000 });
+      await sendEmailJs({
+        from_name: name,
+        company_name: company,
+        message,
+        reply_to: email,
+      });
 
+      toast.success("發送成功！我們將盡快與您聯繫。");
       setCompany("");
       setVat("");
       setName("");
@@ -124,230 +121,241 @@ export default function Contact() {
       setAddress("");
       setNeed("");
       setNote("");
-    } catch {
-      toast.error("送出失敗：EmailJS 寄信錯誤。請確認 Service/Template/收件信箱設定。", { duration: 6000 });
+    } catch (error) {
+      console.error(error);
+      toast.error("發送失敗，請稍後再試或直接聯繫我們。");
     } finally {
       setSending(false);
     }
   };
 
   return (
-    <SiteLayout>
-      <PageBanner
-        image={banner}
-        kicker="CONTACT"
-        title="聯絡怪獸"
-        subtitle="把活動資訊丟過來，我們用『道具＋執行』角度幫你把風險先踩掉。"
-      />
-      <section className="mx-auto max-w-6xl px-4 py-10">
+    <SiteLayout title="聯絡怪獸">
+      <PageBanner title="聯絡怪獸" banner={banner} />
 
-        <div className="mt-8 grid gap-6 md:grid-cols-[.9fr_1.1fr]">
-          <div className="grid gap-4">
-            <Card className="border-border/70 bg-card/40 p-5">
-              <div className="font-display text-2xl">快速聯繫</div>
-
-              <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
-                <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">
-                  <div className="grid gap-2">
-                    <div className="inline-flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-accent" /> TEL：02-8228-1181
+      <div className="bg-slate-50 py-12 lg:py-20">
+        <div className="container mx-auto px-4 lg:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* 聯絡資訊 */}
+            <div className="space-y-6">
+              <Card className="p-6">
+                <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-monster-primary" />
+                  聯絡資訊
+                </h3>
+                <div className="space-y-6">
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 rounded-full bg-monster-primary/10 flex items-center justify-center shrink-0">
+                      <Phone className="w-5 h-5 text-monster-primary" />
                     </div>
-                    <div className="inline-flex items-center gap-2">
-                      <Printer className="h-4 w-4 text-accent" /> FAX：02-8228-2686
-                    </div>
-                    <div className="inline-flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-accent" /> EMAIL：willie1225@yahoo.com.tw
+                    <div>
+                      <p className="text-sm text-slate-500 mb-1">聯絡電話</p>
+                      <p className="font-medium hover:text-monster-primary transition-colors">
+                        <a href="tel:0910123456">0910-123-456</a>
+                      </p>
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-border/70 bg-white/95 p-2">
-                    <img src={lineQr} alt="LINE QR Code" className="h-28 w-28" />
-                    <div className="mt-2 text-center text-xs text-muted-foreground">
-                      掃碼加入 LINE 或
-                      <a className="underline underline-offset-4" href="https://line.me/ti/p/idasr_y8A9" target="_blank" rel="noreferrer">點此加入</a>
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 rounded-full bg-monster-primary/10 flex items-center justify-center shrink-0">
+                      <Mail className="w-5 h-5 text-monster-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-500 mb-1">電子郵件</p>
+                      <p className="font-medium hover:text-monster-primary transition-colors">
+                        <a href="mailto:service@monsterevents.com">service@monsterevents.com</a>
+                      </p>
                     </div>
                   </div>
-                </div>
 
-                <div className="mt-2">
-                  <div className="inline-flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-accent" /> 新北市中和區國光街112巷23弄24號1樓
-                  </div>
-                  <div className="mt-2 overflow-hidden rounded-xl border border-border/70 bg-background/20">
-                    <iframe
-                      title="怪獸道具工廠 Google Map"
-                      className="h-56 w-full"
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      src="https://www.google.com/maps?q=%E6%96%B0%E5%8C%97%E5%B8%82%E4%B8%AD%E5%92%8C%E5%8D%80%E5%9C%8B%E5%85%89%E8%A1%97112%E5%B7%B723%E5%BC%8424%E8%99%9F1%E6%A8%93&output=embed"
-                    />
-                  </div>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="border-border/70 bg-card/40 p-5">
-              <div className="flex items-center gap-2 font-display text-2xl">
-                <ShieldAlert className="h-6 w-6 text-accent" /> 租借條款（重點）
-              </div>
-              <Separator className="my-4" />
-              <ul className="grid gap-2 text-sm text-muted-foreground">
-                <li>• 運費/遠距費用依地點另計；大型道具需事前確認搬運動線與貨梯。</li>
-                <li>• 戶外活動需雨備；遇雨且無安全條件時，可能無法執行。</li>
-                <li>• 道具損毀/髒污/遺失將依押金與實際損害處理。</li>
-                <li>• 正式版網站會提供完整條款頁與取消/改期/退款規則。</li>
-              </ul>
-            </Card>
-          </div>
-
-          <Card className="border-border/70 bg-card/50 p-5">
-            <div className="font-display text-2xl">需求表單</div>
-            <p className="mt-2 text-sm text-muted-foreground">
-              請留下以下資訊，專員會依活動條件回覆建議與報價。
-            </p>
-
-            <div className="mt-5 grid gap-3">
-              <div className="grid gap-3 md:grid-cols-2">
-                <Input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="1. 公司名稱*" />
-                <Input value={vat} onChange={(e) => setVat(e.target.value)} placeholder="2. 統一編號" />
-              </div>
-              <div className="grid gap-3 md:grid-cols-2">
-                <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="3. 聯絡人*" />
-                <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="4. 連絡電話（擇一）" />
-              </div>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="5. EMAIL（擇一）" />
-              <Input value={eventName} onChange={(e) => setEventName(e.target.value)} placeholder="6. 活動名稱" />
-              
-              <div className="rounded-xl border border-border/70 bg-background/20 p-4">
-                <div className="font-display text-foreground text-sm">7–8. 進撤場時間</div>
-                <div className="mt-3 grid gap-3 md:grid-cols-2">
-                  <div className="grid gap-2">
-                    <div className="text-xs text-muted-foreground">進場</div>
-                    <div className="grid gap-2 md:grid-cols-2">
-                      <Input value={inDate} onChange={(e) => setInDate(e.target.value)} type="date" />
-                      <Select value={inTime} onValueChange={setInTime}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="時間" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {TIME_OPTIONS.map((t) => (
-                            <SelectItem key={t} value={t}>
-                              {t}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 rounded-full bg-monster-primary/10 flex items-center justify-center shrink-0">
+                      <MapPin className="w-5 h-5 text-monster-primary" />
                     </div>
-                  </div>
-                  <div className="grid gap-2">
-                    <div className="text-xs text-muted-foreground">撤場</div>
-                    <div className="grid gap-2 md:grid-cols-2">
-                      <Input value={outDate} onChange={(e) => setOutDate(e.target.value)} type="date" />
-                      <Select value={outTime} onValueChange={setOutTime}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="時間" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {TIME_OPTIONS.map((t) => (
-                            <SelectItem key={t} value={t}>
-                              {t}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                    <div>
+                      <p className="text-sm text-slate-500 mb-1">辦公地點</p>
+                      <p className="font-medium">台北市信義區忠孝東路五段 1 號</p>
                     </div>
                   </div>
                 </div>
-                <div className="mt-2 text-[10px] text-muted-foreground text-center">不確定也可先留空；我們會再協助確認。</div>
-              </div>
 
-              <div className="rounded-xl border border-border/70 bg-background/20 p-4">
-                <div className="font-display text-foreground text-sm">9. 活動地點</div>
-                <div className="mt-3 grid gap-2 md:grid-cols-3">
-                  <Select value={city} onValueChange={setCity}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="縣市" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {CITY_OPTIONS.map((c) => (
-                        <SelectItem key={c} value={c}>
-                          {c}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Input value={district} onChange={(e) => setDistrict(e.target.value)} placeholder="區/鄉鎮（選填）" />
-                  <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="地址/場館（選填）" />
+                <Separator className="my-8" />
+
+                <div className="text-center">
+                  <p className="text-sm font-medium text-slate-600 mb-4">加入 LINE 官方帳號</p>
+                  <div className="bg-white p-2 inline-block rounded-xl shadow-sm border mb-4">
+                    <img src={lineQr} alt="LINE QR Code" className="w-32 h-32" />
+                  </div>
+                  <p className="text-xs text-slate-400">掃描 QR Code 立即諮詢</p>
                 </div>
-              </div>
+              </Card>
 
-              <Textarea
-                value={need}
-                onChange={(e) => setNeed(e.target.value)}
-                placeholder="10. 需求：尺寸、大小、數量 等資訊；或與專員討論，我們提供建議"
-              />
-              <Textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="※備註（其他補充）" />
-
-              <div className="rounded-xl border border-border/70 bg-background/20 p-4 text-xs text-muted-foreground">
-                <div className="font-display text-foreground">費用提醒</div>
-                <ul className="mt-2 grid gap-1">
-                  <li>1. 費用會與進撤場時間有關（9 點前、18 點後會有加班費）</li>
-                  <li>2. 使用人數可能會與道具大小有關，費用不同</li>
-                  <li>3. 如需撤除會加收廢棄物清潔費</li>
-                  <li>4. 廠商位於新北中和，運送距離/道具大小會影響運輸費</li>
-                </ul>
-              </div>
+              <Card className="p-6 bg-monster-primary text-white">
+                <div className="flex items-center gap-2 mb-4">
+                  <ShieldAlert className="w-5 h-5" />
+                  <h4 className="font-bold">急件處理</h4>
+                </div>
+                <p className="text-sm opacity-90 leading-relaxed mb-4">
+                  若您的活動在 48 小時內即將舉行，建議直接撥打電話或透過 LINE 聯繫，以便我們為您提供即時協助。
+                </p>
+                <Button variant="secondary" className="w-full" asChild>
+                  <a href="tel:0910123456">撥打電話</a>
+                </Button>
+              </Card>
             </div>
 
-            <Button onClick={submit} size="lg" className="mt-5 w-full bg-accent text-accent-foreground hover:bg-accent/90" disabled={sending}>
-              {sending ? "送出中…" : "送出"}
-            </Button>
-          </Card>
+            {/* 需求表單 */}
+            <div className="lg:col-span-2">
+              <Card className="p-6 lg:p-8">
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold mb-2">填寫需求表單</h3>
+                  <p className="text-slate-500">
+                    請填寫以下資訊，我們將在 24 小時內回覆您的需求。
+                  </p>
+                </div>
 
-          <Card className="border-border/70 bg-card/40 p-5">
-            <div className="font-display text-2xl">常見問題（FAQ）</div>
-            <p className="mt-2 text-sm text-muted-foreground">先把客戶最常問的回答好，報價溝通會快很多。</p>
+                <div className="space-y-8">
+                  <Accordion type="multiple" defaultValue={["basic", "event", "needs"]}>
+                    <AccordionItem value="basic" className="border-monster-primary/20">
+                      <AccordionTrigger className="text-lg font-bold hover:no-underline py-4">
+                        <span className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded bg-monster-primary text-white text-xs flex items-center justify-center">1</span>
+                          基本資訊
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700">公司名稱/單位 <span className="text-red-500">*</span></label>
+                            <Input placeholder="請輸入公司或單位名稱" value={company} onChange={(e) => setCompany(e.target.value)} />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700">統一編號 (選填)</label>
+                            <Input placeholder="請輸入 8 位數字" value={vat} onChange={(e) => setVat(e.target.value)} />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700">聯絡人姓名 <span className="text-red-500">*</span></label>
+                            <Input placeholder="請輸入姓名" value={name} onChange={(e) => setName(e.target.value)} />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700">聯絡電話 <span className="text-red-500">*</span></label>
+                            <Input placeholder="請輸入電話" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                          </div>
+                          <div className="md:col-span-2 space-y-2">
+                            <label className="text-sm font-medium text-slate-700">電子郵件 <span className="text-red-500">*</span></label>
+                            <Input placeholder="example@mail.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
-            <Accordion type="single" collapsible className="mt-4">
-              <AccordionItem value="q1" className="border-border/70">
-                <AccordionTrigger className="text-left">費用會怎麼計算？</AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground">
-                  主要會依「進撤場時間、道具尺寸/數量、是否含現場人員、運送距離」評估。9 點前與 18 點後通常會有加班費。
-                </AccordionContent>
-              </AccordionItem>
+                    <AccordionItem value="event" className="border-monster-primary/20">
+                      <AccordionTrigger className="text-lg font-bold hover:no-underline py-4">
+                        <span className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded bg-monster-primary text-white text-xs flex items-center justify-center">2</span>
+                          活動細節
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-6 space-y-4">
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-slate-700">活動名稱 (選填)</label>
+                          <Input placeholder="例如：2024 年度尾牙" value={eventName} onChange={(e) => setEventName(e.target.value)} />
+                        </div>
 
-              <AccordionItem value="q2" className="border-border/70">
-                <AccordionTrigger className="text-left">運輸費怎麼算？</AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground">
-                  廠商位於新北中和，運送距離以及道具大小/車次會影響費用；若有進場限制或需要上樓搬運，也請先告知。
-                </AccordionContent>
-              </AccordionItem>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700">進場時間</label>
+                            <div className="flex gap-2">
+                              <Input type="date" className="flex-1" value={inDate} onChange={(e) => setInDate(e.target.value)} />
+                              <Select value={inTime} onValueChange={setInTime}>
+                                <SelectTrigger className="w-[110px]">
+                                  <SelectValue placeholder="時間" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {TIME_OPTIONS.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700">撤場時間</label>
+                            <div className="flex gap-2">
+                              <Input type="date" className="flex-1" value={outDate} onChange={(e) => setOutDate(e.target.value)} />
+                              <Select value={outTime} onValueChange={setOutTime}>
+                                <SelectTrigger className="w-[110px]">
+                                  <SelectValue placeholder="時間" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {TIME_OPTIONS.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                        </div>
 
-              <AccordionItem value="q3" className="border-border/70">
-                <AccordionTrigger className="text-left">需要多少使用人數？</AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground">
-                  使用人數可能會與道具大小、操作複雜度有關（例如大型/電動/連動道具），人員配置不同費用也會不同。
-                </AccordionContent>
-              </AccordionItem>
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-slate-700">活動地點</label>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                            <Select value={city} onValueChange={setCity}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="選擇縣市" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {CITY_OPTIONS.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                              </SelectContent>
+                            </Select>
+                            <Input placeholder="區域（如：信義區）" value={district} onChange={(e) => setDistrict(e.target.value)} />
+                            <Input placeholder="詳細地址" className="md:col-span-1" value={address} onChange={(e) => setAddress(e.target.value)} />
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
 
-              <AccordionItem value="q4" className="border-border/70">
-                <AccordionTrigger className="text-left">撤除與清潔費用怎麼算？</AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground">
-                  如需撤除會加收廢棄物清潔費；若現場有回收/分類規範或指定清運流程，也請先提供。
-                </AccordionContent>
-              </AccordionItem>
+                    <AccordionItem value="needs" className="border-monster-primary/20 border-b-0">
+                      <AccordionTrigger className="text-lg font-bold hover:no-underline py-4">
+                        <span className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded bg-monster-primary text-white text-xs flex items-center justify-center">3</span>
+                          需求說明
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent className="pt-2 pb-2 space-y-4">
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-slate-700">主要需求項目</label>
+                          <Input placeholder="例如：舞台音響、燈光租賃、活動統籌" value={need} onChange={(e) => setNeed(e.target.value)} />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium text-slate-700">備註或其他說明</label>
+                          <Textarea 
+                            placeholder="請在此提供更多細節，幫助我們更精確地為您報價..." 
+                            className="min-h-[120px]"
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                          />
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
 
-              <AccordionItem value="q5" className="border-border/70">
-                <AccordionTrigger className="text-left">我不確定需求尺寸/數量怎麼辦？</AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground">
-                  沒問題。先填寫活動名稱、進撤場時間、地點與大概想要的效果（例如注水顯字/推桿連動/揭牌），我們會與你討論並提供建議。
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </Card>
+                <div className="mt-8">
+                  <Button 
+                    className="w-full h-12 text-lg font-bold" 
+                    onClick={submit}
+                    disabled={sending}
+                  >
+                    {sending ? "發送中..." : "確認送出需求"}
+                  </Button>
+                  <p className="text-center text-xs text-slate-400 mt-4">
+                    點擊送出即代表您同意我們的服務條款與隱私權政策
+                  </p>
+                </div>
+              </Card>
+            </div>
+          </div>
         </div>
-      <NextStepCTA mode="both" />
-      </section>
+      </div>
+
+      <NextStepCTA />
     </SiteLayout>
   );
 }
