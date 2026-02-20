@@ -132,7 +132,9 @@ export default function Quote() {
     setErrors(nextErrors);
 
     if (missing.length) {
-      toast.error("尚未完成以下步驟：\n" + missing.join("\n"), { duration: 6500 });
+      toast.error("尚未完成以下步驟：
+" + missing.join("
+"), { duration: 6500 });
 
       const scrollTo = (el: HTMLElement | null | undefined) => {
         if (!el) return;
@@ -162,7 +164,9 @@ export default function Quote() {
     }
 
     if (riskMissing.length) {
-      toast.message("建議補充（可先送出）：\n" + riskMissing.map((x) => `• ${x}`).join("\n"), { duration: 6000 });
+      toast.message("建議補充（可先送出）：
+" + riskMissing.map((x) => `• ${x}`).join("
+"), { duration: 6000 });
     }
     if (email.trim() && !isValidEmail(email)) {
       setErrors((prev) => ({ ...prev, email: "EMAIL 格式似乎不正確" }));
@@ -197,7 +201,8 @@ export default function Quote() {
         `室內/戶外（雨備）：${riskIndoorOutdoor ? "已確認" : "未填（待確認）"}`,
         `舞台高度／有無坡道：${riskStage ? "已確認" : "未填（待確認）"}`,
         `現場人員執行：${riskStaff ? "已確認" : "未填（待確認）"}`,
-      ].join("\n");
+      ].join("
+");
 
       const base = {
         source: "quote" as const,
@@ -211,7 +216,8 @@ export default function Quote() {
         outAt,
         location,
         need,
-        memo: [memo?.trim(), memo?.trim() ? "" : "", "---", "報價關鍵確認：", riskNotes].filter(Boolean).join("\n"),
+        memo: [memo?.trim(), memo?.trim() ? "" : "", "---", "報價關鍵確認：", riskNotes].filter(Boolean).join("
+"),
         lines: asLines(lines as any),
         pageUrl: typeof window !== "undefined" ? window.location.href : "",
         createdAtIso,
@@ -225,7 +231,8 @@ export default function Quote() {
         message: buildQuoteEmailMessage(base),
       });
 
-      toast.success("已送出，已寄送到信箱。\n預計 1 個工作天內回覆。", { duration: 5000 });
+      toast.success("已送出，已寄送到信箱。
+預計 1 個工作天內回覆。", { duration: 5000 });
 
       // Save submission for analytics + quote leads
       // 1) Try Supabase (preferred)
@@ -536,7 +543,7 @@ export default function Quote() {
                     <div className="grid gap-2">
                       <div className="text-xs text-muted-foreground">進場</div>
                       <div className="grid gap-2 md:grid-cols-2">
-                        <Input value={inDate} onChange={(e) => setInDate(e.target.value)} type="date" />
+                        <Input value={inDate} onChange={(e) => setInDate(e.target.value)} type="date" className="[&::-webkit-calendar-picker-indicator]:invert" />
                         <Select value={inTime} onValueChange={setInTime}>
                           <SelectTrigger>
                             <SelectValue placeholder="時間" />
@@ -554,7 +561,7 @@ export default function Quote() {
                     <div className="grid gap-2">
                       <div className="text-xs text-muted-foreground">撤場</div>
                       <div className="grid gap-2 md:grid-cols-2">
-                        <Input value={outDate} onChange={(e) => setOutDate(e.target.value)} type="date" />
+                        <Input value={outDate} onChange={(e) => setOutDate(e.target.value)} type="date" className="[&::-webkit-calendar-picker-indicator]:invert" />
                         <Select value={outTime} onValueChange={setOutTime}>
                           <SelectTrigger>
                             <SelectValue placeholder="時間" />
