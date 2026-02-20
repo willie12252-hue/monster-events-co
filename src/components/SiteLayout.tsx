@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
-import Button from "@/components/ui/button";
-import Badge from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Sheet,
   SheetContent,
@@ -9,7 +9,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import useQuote from "@/contexts/QuoteContext";
+import { useQuote } from "@/contexts/QuoteContext";
 import ScrollEnergyBar from "@/components/ScrollEnergyBar";
 import ScrollToTopFab from "@/components/ScrollToTopFab";
 import logo from "@/assets/logo_new.png";
