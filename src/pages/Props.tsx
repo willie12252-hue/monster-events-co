@@ -234,7 +234,7 @@ export default function Props() {
               <div className="p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-xs tracking-widest text-muted-foreground">{categoryMeta[p.category].label}</div>
+                  <div className="text-xs tracking-widest text-muted-foreground">{categoryMeta?.[p.category]?.label ?? "未分類"}</div>
                   <div className="mt-2 font-display text-xl">{p.name}</div>
                 </div>
                 <div className="text-accent transition group-hover:translate-x-1">
