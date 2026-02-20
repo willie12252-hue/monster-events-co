@@ -143,7 +143,7 @@ export function getDefaultData(): AppData {
       serviceId: "service_sbm9mb6",
       templateId: "template_os1yh0p",
       publicKey: "NAblGRT4QgIAilmbZ",
-      toEmail: "willie12252@gmail.com",
+      toEmail: "willie1225@yahoo.com.tw",
       thankYouEnabled: false,
       thankYouTemplateId: "",
     },
