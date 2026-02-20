@@ -1,6 +1,4 @@
-i
-
-mport SiteLayout from "@/components/SiteLayout";
+import SiteLayout from "@/components/SiteLayout";
 import PageBanner from "@/components/PageBanner";
 import banner from "@/assets/banner-knowledge-lab.webp";
 import NextStepCTA from "@/components/NextStepCTA";
