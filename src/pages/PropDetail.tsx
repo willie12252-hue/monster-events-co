@@ -66,7 +66,6 @@ export default function PropDetail({ slug }: { slug: string }) {
     });
   }, [prop]);
 
-  // View counter (localStorage based)
   useEffect(() => {
     if (!prop) return;
     if (bumpedRef.current === prop.id) return;
@@ -87,8 +86,8 @@ export default function PropDetail({ slug }: { slug: string }) {
       <PageBanner
         image={banner}
         kicker={categoryMeta?.[prop.category]?.label ?? "未分類"}
-        title={prop.name}
-        subtitle={prop.summary}
+        title={prop.name || "未命名"}
+        subtitle={prop.summary || ""}
       />
       <section className="mx-auto max-w-6xl px-4 py-10">
         <div className="flex flex-wrap items-center gap-3">
@@ -100,7 +99,7 @@ export default function PropDetail({ slug }: { slug: string }) {
           <Badge variant="secondary" className="bg-background/30">
             {categoryMeta?.[prop.category]?.label ?? "未分類"}
           </Badge>
-          {prop.tags.map((t) => (
+          {(prop.tags || []).map((t: string) => (
             <Badge key={t} variant="outline" className="border-border/70">
               {t}
             </Badge>
@@ -109,38 +108,37 @@ export default function PropDetail({ slug }: { slug: string }) {
 
         <div className="mt-6 grid gap-8 md:grid-cols-[1.2fr_.8fr]">
           <div>
-
-            {/* Quick specs */}
             <div className="mt-4 flex flex-wrap gap-2 text-sm">
               <Badge variant="secondary" className="bg-background/30">
                 <Zap className="h-3.5 w-3.5" />
                 <span className="ml-1">
-                  {prop.quick.power === "need"
+                  {prop?.quick?.power === "need"
                     ? "需用電"
-                    : prop.quick.power === "none"
+                    : prop?.quick?.power === "none"
                       ? "不需用電"
-                      : "可選用電"}
+                      : "可選用電/未標示"}
                 </span>
               </Badge>
               <Badge variant="secondary" className="bg-background/30">
-                <Users className="h-3.5 w-3.5" /> <span className="ml-1">{prop.quick.crew} 人</span>
+                <Users className="h-3.5 w-3.5" /> <span className="ml-1">{prop?.quick?.crew ?? 1} 人</span>
               </Badge>
               <Badge variant="secondary" className="bg-background/30">
                 <DoorOpen className="h-3.5 w-3.5" />
                 <span className="ml-1">
-                  {prop.quick.venue === "indoor"
+                  {prop?.quick?.venue === "indoor"
                     ? "室內"
-                    : prop.quick.venue === "outdoor"
+                    : prop?.quick?.venue === "outdoor"
                       ? "戶外"
                       : "室內/戶外"}
                 </span>
               </Badge>
-              <Badge variant="secondary" className="bg-background/30">
-                <Ruler className="h-3.5 w-3.5" /> <span className="ml-1">{formatFootprint(prop.quick.footprint)}</span>
-              </Badge>
+              {prop?.quick?.footprint && (
+                <Badge variant="secondary" className="bg-background/30">
+                  <Ruler className="h-3.5 w-3.5" /> <span className="ml-1">{formatFootprint(prop.quick.footprint)}</span>
+                </Badge>
+              )}
             </div>
 
-            {/* Media */}
             <Card className="relative mt-6 overflow-hidden border-border/70 bg-card/40">
               <div className="hazard h-2 w-full" />
               <div className="p-4">
@@ -177,7 +175,7 @@ export default function PropDetail({ slug }: { slug: string }) {
                         <div className="font-display text-base">快速看懂（不用看完影片）</div>
                         <div className="mt-2 text-sm text-muted-foreground">{prop.summary}</div>
                         <div className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                          {prop.highlights.slice(0, 3).map((h) => (
+                          {(prop.highlights || []).slice(0, 3).map((h: string) => (
                             <div key={h} className="flex gap-3">
                               <span className="mt-2 h-2 w-2 rounded-full bg-accent" />
                               <span>{h}</span>
@@ -196,18 +194,13 @@ export default function PropDetail({ slug }: { slug: string }) {
                     </div>
                   )}
                 </div>
-
-                <div className="mt-3 grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
-                  <div className="rounded-lg border border-border/70 bg-card/40 p-3">圖片輪播：後台可上傳多張</div>
-                  <div className="rounded-lg border border-border/70 bg-card/40 p-3">影片：上傳或貼 YouTube/Vimeo 連結</div>
-                </div>
               </div>
             </Card>
 
             <div className="mt-8">
               <div className="font-display text-2xl">亮點</div>
               <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">
-                {prop.highlights.map((h) => (
+                {(prop.highlights || []).map((h: string) => (
                   <li key={h} className="flex gap-3">
                     <span className="mt-2 h-2 w-2 rounded-full bg-accent" />
                     <span>{h}</span>
@@ -249,18 +242,17 @@ export default function PropDetail({ slug }: { slug: string }) {
             </div>
           </div>
 
-          {/* Sidebar */}
           <div>
             <Card className="sticky top-24 border-border/70 bg-card/50 p-5">
               <div className="font-display text-2xl">規格</div>
               <div className="mt-4 grid gap-3 text-sm">
                 {(
                   [
-                    ["尺寸", prop.specs.size],
-                    ["用電需求", prop.specs.power],
-                    ["建議人員", `${prop.quick.crew} 人`],
-                    ["建議場地", prop.quick.venue === "indoor" ? "室內" : prop.quick.venue === "outdoor" ? "戶外" : "室內/戶外"],
-                    ["尺寸提示", formatFootprint(prop.quick.footprint)],
+                    ["尺寸", prop?.specs?.size ?? "未標示"],
+                    ["用電需求", prop?.specs?.power ?? "未標示"],
+                    ["建議人員", `${prop?.quick?.crew ?? 1} 人`],
+                    ["建議場地", prop?.quick?.venue === "indoor" ? "室內" : prop?.quick?.venue === "outdoor" ? "戶外" : "室內/戶外"],
+                    ["尺寸提示", prop?.quick?.footprint ? formatFootprint(prop.quick.footprint) : "無"],
                   ] as const
                 ).map(([k, v]) => (
                   <div key={k} className="rounded-lg border border-border/70 bg-background/20 p-3">
@@ -281,8 +273,6 @@ export default function PropDetail({ slug }: { slug: string }) {
               <Button asChild variant="outline" className="mt-2 w-full">
                 <Link href="/contact">直接聯絡專員</Link>
               </Button>
-
-              <div className="mt-3 text-xs text-muted-foreground">填完不代表下訂，僅供報價與建議。</div>
             </Card>
           </div>
         </div>
