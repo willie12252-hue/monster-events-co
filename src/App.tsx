@@ -18,7 +18,7 @@ import Cases from "@/pages/Cases";
 import CaseDetail from "@/pages/CaseDetail";
 import NotFound from "@/pages/NotFound";
 import { QuoteProvider } from "@/contexts/QuoteContext";
-import { DataProvider } from "@/contexts/DataContext";
+import { DataProvider } from "@/contexts/DataProvider";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import ScrollToTopOnRouteChange from "@/components/ScrollToTopOnRouteChange";
 
