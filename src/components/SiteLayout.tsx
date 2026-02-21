@@ -50,173 +50,146 @@ export default function SiteLayout({
     <div className="min-h-screen bg-background text-foreground">
       <ScrollEnergyBar />
       <ScrollToTopFab />
-
-      <header
-        className={cn(
-          "sticky top-0 z-50 border-b bg-background/70 backdrop-blur",
-          tone === "hazard" && "border-accent/40"
-        )}
-      >
+      <header className={cn("sticky top-0 z-50 border-b bg-background/70 backdrop-blur", tone === "hazard" && "border-accent/40")}> 
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
           <Link href="/" className="flex items-center gap-3">
-            <img src={logo} alt="怪獸道具工廠" className="h-14 w-auto" />
-            <div className="leading-tight">
-              <div className="text-xl font-black tracking-tighter italic">
-                MONSTERS PROPS INC.
-              </div>
-              <div className="text-sm font-bold opacity-80 tracking-widest">
-                怪獸道具工廠
-              </div>
-            </div>
+            <img
+              src={logo}
+              alt="怪獸道具工廠"
+              className="h-14 w-auto"
+            />
           </Link>
 
-          <nav className="ml-auto hidden items-center gap-8 md:flex">
-            {nav.map((item) => (
+          <nav className="ml-auto hidden items-center gap-1 md:flex">
+            {nav.map((i) => (
               <Link
-                key={item.href}
-                href={item.href}
+                key={i.href}
+                href={i.href}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  loc === item.href ? "text-primary" : "text-foreground/70"
+                  "rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-secondary hover:text-foreground",
+                  loc === i.href && "bg-secondary text-foreground",
                 )}
               >
-                {item.label}
+                {i.label}
               </Link>
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-3 md:ml-0">
-            <div className="hidden items-center gap-3 lg:flex">
-              <Button variant="ghost" size="sm" className="gap-2" asChild>
-                <a href="tel:02-8228-1181">
-                  <Phone className="h-4 w-4" />
-                  <span>02-8228-1181</span>
-                </a>
-              </Button>
-              <Button variant="outline" size="sm" className="gap-2" asChild>
-                <a href="https://line.me" target="_blank" rel="noreferrer">
-                  <MessageCircle className="h-4 w-4" />
-                  <span>LINE</span>
-                </a>
-              </Button>
-            </div>
+          <div className="ml-auto flex items-center gap-2 md:ml-0">
 
-            <Button size="sm" className="gap-2 relative" asChild>
+            <Button asChild variant="outline" className="hidden sm:inline-flex">
+              <a href="https://line.me/ti/p/idasr_y8A9" target="_blank" rel="noreferrer" aria-label="加入 LINE">
+                <MessageCircle className="mr-2 h-4 w-4" /> LINE
+              </a>
+            </Button>
+
+            <Button asChild className="relative">
               <Link href="/quote">
-                <FileText className="h-4 w-4" />
-                <span>詢價單</span>
+                <FileText className="mr-2 h-4 w-4" /> 詢價單
                 {count > 0 && (
-                  <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 rounded-full">
-                    {count}
-                  </Badge>
+                  <Badge className="ml-2 bg-accent text-accent-foreground">{count}</Badge>
                 )}
               </Link>
             </Button>
 
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <SheetHeader>
-                  <SheetTitle className="text-left flex items-center gap-3">
-                    <img src={logo} alt="Logo" className="h-8 w-auto" />
-                    <span>怪獸道具工廠</span>
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="mt-8 flex flex-col gap-4">
-                  {nav.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={cn(
-                        "text-lg font-semibold transition-colors hover:text-primary",
-                        loc === item.href ? "text-primary" : "text-foreground"
-                      )}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                  <hr className="my-4 border-muted" />
-                  <Button className="w-full gap-2" variant="outline" asChild>
-                    <a href="https://line.me" target="_blank" rel="noreferrer">
-                      <MessageCircle className="h-5 w-5" />
-                      加 LINE 諮詢
-                    </a>
+            {/* Mobile menu */}
+            <div className="md:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="secondary" size="icon" aria-label="開啟選單">
+                    <Menu className="h-5 w-5" />
                   </Button>
-                </div>
-              </SheetContent>
-            </Sheet>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-[86vw] max-w-sm">
+                  <SheetHeader>
+                    <SheetTitle className="font-display">選單</SheetTitle>
+                  </SheetHeader>
+
+                  <div className="mt-6 grid gap-2">
+                    {nav.map((i) => (
+                      <Link
+                        key={i.href}
+                        href={i.href}
+                        className={cn(
+                          "rounded-lg border border-border/70 bg-card/40 px-4 py-3 text-sm text-muted-foreground transition hover:border-accent/50 hover:text-foreground",
+                          loc === i.href && "border-accent/50 text-foreground",
+                        )}
+                      >
+                        {i.label}
+                      </Link>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 grid gap-2">
+                    <Button asChild variant="outline" className="justify-start">
+                      <a href="https://line.me/ti/p/idasr_y8A9" target="_blank" rel="noreferrer">
+                        <MessageCircle className="mr-2 h-4 w-4" /> 加入 LINE
+                      </a>
+                    </Button>
+                  </div>
+
+
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </header>
 
       <main>{children}</main>
 
-      <footer className="mt-auto border-t bg-muted/30">
-        <div className="mx-auto max-w-6xl px-4 py-12">
-          <div className="grid gap-12 md:grid-cols-4">
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-3 mb-6">
-                <img src={logo} alt="Logo" className="h-10 w-auto" />
-                <div className="font-bold text-xl">怪獸道具工廠</div>
-              </div>
-              <p className="text-muted-foreground mb-6 max-w-md">
-                我們提供全台灣最專業的啟動儀式道具租借與客製化製作服務。從新品發佈會、動土典禮到大型節慶，怪獸道具都是您最強大的執行後盾。
-              </p>
-              <div className="flex gap-4">
-                <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary underline underline-offset-4">
-                  租借條款與細則
-                </Link>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-bold mb-6 text-foreground/80 uppercase tracking-wider text-sm">快速連結</h3>
-              <ul className="space-y-4 text-sm">
-                {nav.map((item) => (
-                  <li key={item.href}>
-                    <Link href={item.href} className="text-muted-foreground hover:text-primary">
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-bold mb-6 text-foreground/80 uppercase tracking-wider text-sm">聯繫方式</h3>
-              <ul className="space-y-4 text-sm">
-                <li className="flex items-center gap-3 text-muted-foreground">
-                  <MapPin className="h-4 w-4" />
-                  <span>新北市中和區國光街112巷23弄24號1樓</span>
-                </li>
-                <li className="flex items-center gap-3 text-muted-foreground">
-                  <Phone className="h-4 w-4" />
-                  <span>02-8228-1181</span>
-                </li>
-                <li className="flex items-center gap-3 text-muted-foreground">
-                  <Mail className="h-4 w-4" />
-                  <span>willie1225@gmail.com</span>
-                </li>
-                <li className="pt-4">
-                  <div className="bg-background p-3 rounded-xl border border-primary/10 inline-block">
-                    <img src={lineQr} alt="LINE QR" className="h-24 w-24" />
-                    <div className="text-[10px] text-center mt-2 font-bold text-primary">掃描加 LINE</div>
-                  </div>
-                </li>
-              </ul>
+      <footer className="relative mt-24 border-t border-border/70">
+        <div className="pointer-events-none absolute inset-0 opacity-40">
+          <div className="noise absolute inset-0" />
+        </div>
+        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 md:grid-cols-3">
+          <div>
+            <div className="font-display text-xl">怪獸道具工廠</div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              我們不收集尖叫聲；我們只收集現場的驚嘆聲與掌聲。
+              <br />
+              啟動道具租借｜客製化製作｜現場執行支援
+            </p>
+          </div>
+          <div className="text-sm text-muted-foreground">
+            <div className="font-display text-base text-foreground">快速入口</div>
+            <div className="mt-2 grid gap-2">
+              <Link href="/props" className="inline-flex items-center gap-2 hover:text-foreground">
+                <Boxes className="h-4 w-4" /> 道具軍火庫
+              </Link>
+              <Link href="/knowledge" className="inline-flex items-center gap-2 hover:text-foreground">
+                <Sparkles className="h-4 w-4" /> 怪獸情報局
+              </Link>
+              <Link href="/contact" className="inline-flex items-center gap-2 hover:text-foreground">
+                <ShieldAlert className="h-4 w-4" /> 聯絡與條款
+              </Link>
             </div>
           </div>
+          <div className="text-sm text-muted-foreground">
+            <div className="font-display text-base text-foreground">聯絡資訊</div>
+            <div className="mt-2 flex flex-col gap-3">
+              <div className="flex flex-col gap-1">
+                <div className="inline-flex items-center gap-2"><Phone className="h-4 w-4 text-accent" />TEL：02-8228-1181</div>
+                <div className="inline-flex items-center gap-2"><Printer className="h-4 w-4 text-accent" />FAX：02-8228-2686</div>
+                <div className="inline-flex items-center gap-2"><Mail className="h-4 w-4 text-accent" />EMAIL：willie1225@yahoo.com.tw</div>
+                <div className="inline-flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-accent" /><span>新北市中和區國光街112巷23弄24號1樓</span></div>
+              </div>
 
-          <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-            <div>© 2026 MONSTERS PROPS INC. 版權所有</div>
-            <div className="flex gap-6">
-              <span>怪獸活動公司出品</span>
+              <div className="flex items-start justify-between gap-4">
+                <div className="text-xs text-muted-foreground">
+                  <div className="inline-flex items-center gap-2 font-display text-foreground"><MessageCircle className="h-4 w-4 text-accent" />LINE</div>
+                  <div className="mt-1">掃碼加入（或到聯絡頁點連結）</div>
+                </div>
+                <div className="rounded-lg border border-border/70 bg-white/95 p-2">
+                  <img src={lineQr} alt="LINE QR Code" className="h-24 w-24" />
+                </div>
+              </div>
+
             </div>
           </div>
+        </div>
+        <div className="border-t border-border/70 py-4 text-center text-xs text-muted-foreground">
+          © {new Date().getFullYear()} Monster Events Co.
         </div>
       </footer>
     </div>
