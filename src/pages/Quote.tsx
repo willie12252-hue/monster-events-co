@@ -132,9 +132,7 @@ export default function Quote() {
     setErrors(nextErrors);
 
     if (missing.length) {
-      toast.error("尚未完成以下步驟：
-" + missing.join("
-"), { duration: 6500 });
+      toast.error("尚未完成以下步驟：\n" + missing.join("\n"), { duration: 6500 });
 
       const scrollTo = (el: HTMLElement | null | undefined) => {
         if (!el) return;
@@ -164,9 +162,7 @@ export default function Quote() {
     }
 
     if (riskMissing.length) {
-      toast.message("建議補充（可先送出）：
-" + riskMissing.map((x) => `• ${x}`).join("
-"), { duration: 6000 });
+      toast.message("建議補充（可先送出）：\n" + riskMissing.map((x) => `• ${x}`).join("\n"), { duration: 6000 });
     }
     if (email.trim() && !isValidEmail(email)) {
       setErrors((prev) => ({ ...prev, email: "電子郵件格式似乎不正確" }));
