@@ -197,8 +197,7 @@ export default function Quote() {
         `室內/戶外（雨備）：${riskIndoorOutdoor ? "已確認" : "未填（待確認）"}`,
         `舞台高度／有無坡道：${riskStage ? "已確認" : "未填（待確認）"}`,
         `現場人員執行：${riskStaff ? "已確認" : "未填（待確認）"}`,
-      ].join("
-");
+      ].join("\n");
 
       const base = {
         source: "quote" as const,
@@ -212,8 +211,7 @@ export default function Quote() {
         outAt,
         location,
         need,
-        memo: [memo?.trim(), memo?.trim() ? "" : "", "---", "報價關鍵確認：", riskNotes].filter(Boolean).join("
-"),
+        memo: [memo?.trim(), memo?.trim() ? "" : "", "---", "報價關鍵確認：", riskNotes].filter(Boolean).join("\n"),
         lines: asLines(lines as any),
         pageUrl: typeof window !== "undefined" ? window.location.href : "",
         createdAtIso,
@@ -227,8 +225,7 @@ export default function Quote() {
         message: buildQuoteEmailMessage(base),
       });
 
-      toast.success("已送出，已寄送到信箱。
-預計 1 個工作天內回覆。", { duration: 5000 });
+      toast.success("已送出，已寄送到信箱。\n預計 1 個工作天內回覆。", { duration: 5000 });
 
       // Save submission for analytics + quote leads
       // 1) Try Supabase (preferred)
