@@ -36,7 +36,7 @@ export default function Knowledge() {
     const e = email.trim().toLowerCase();
     if (!newsletter?.enabled) return;
     if (!consent) return toast.error("請先勾選同意接收電子報");
-    if (!emailOk) return toast.error("請輸入正確的 Email");
+    if (!emailOk) return toast.error("請輸入正確的電子郵件");
 
     const exists = (newsletterSubscribers ?? []).some((x: any) => String(x.email || "").toLowerCase() === e);
     if (exists) return toast.message("你已訂閱過了");
@@ -107,7 +107,7 @@ toast.success("已完成訂閱！");
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="MONSTER INTEL"
+        kicker="怪獸情報"
         title="怪獸情報局"
         subtitle="把客戶最常問的風險與避雷先寫好，提案會更穩、成交會更快。"
       />

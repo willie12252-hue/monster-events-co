@@ -36,7 +36,7 @@ export default function Cases() {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="CASES"
+        kicker="案例"
         title="近期案例"
         subtitle="精選近期合作案例與可複製的啟動節奏，方便你快速找靈感。"
       />

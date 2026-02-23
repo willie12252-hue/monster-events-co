@@ -165,7 +165,7 @@ export default function AdminMock() {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="ADMIN"
+        kicker="後台"
         title="管理員後台"
         subtitle="管理：道具軍火庫／近期案例／怪獸情報局（文章）。"
       />
@@ -184,7 +184,7 @@ function AdminLogin() {
   const login = async () => {
     const e = email.trim();
     if (!e || !pwd) {
-      toast.error("請輸入 Email 與密碼");
+      toast.error("請輸入電子郵件與密碼");
       return;
     }
 
@@ -208,7 +208,7 @@ function AdminLogin() {
   const sendReset = async () => {
     const e = email.trim();
     if (!e) {
-      toast.error("請先輸入 Email");
+      toast.error("請先輸入電子郵件");
       return;
     }
 
@@ -216,7 +216,7 @@ function AdminLogin() {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(e);
       if (error) throw error;
-      toast.success("已寄出重設密碼 Email（請到信箱收信）");
+      toast.success("已寄出重設密碼信（請到信箱收信）");
     } catch (err: any) {
       toast.error(err?.message || "寄送失敗");
     } finally {
@@ -233,7 +233,7 @@ function AdminLogin() {
             <div className="mt-2 text-sm text-muted-foreground">
               管理後台登入：
               <br />
-              使用 Supabase Auth 的 Email / 密碼
+              使用 Supabase Auth 的 電子郵件 / 密碼
             </div>
             <div className="mt-6 text-xs text-muted-foreground">提示：可在 Supabase 後台建立多個使用者帳號（多人管理）。</div>
           </div>
@@ -244,7 +244,7 @@ function AdminLogin() {
           <div className="mt-1 text-sm text-muted-foreground">請輸入管理員帳號密碼</div>
           <div className="mt-6 grid gap-3">
             <div className="grid gap-1">
-              <div className="text-xs text-muted-foreground">Email</div>
+              <div className="text-xs text-muted-foreground">電子郵件</div>
               <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" />
             </div>
             <div className="grid gap-1">
@@ -261,7 +261,7 @@ function AdminLogin() {
               disabled={loading || resetLoading}
               className="border-border/70"
             >
-              {resetLoading ? "寄送中…" : "寄送重設密碼 Email"}
+              {resetLoading ? "寄送中…" : "寄送重設密碼信"}
             </Button>
           </div>
         </Card>
@@ -834,7 +834,7 @@ function PropEditDialog({
                     }
                     placeholder="長"
                   />
-                  <div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">cm</div>
+                  <div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">公分</div>
                 </div>
                 <div className="relative">
                   <Input
@@ -853,7 +853,7 @@ function PropEditDialog({
                     }
                     placeholder="寬"
                   />
-                  <div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">cm</div>
+                  <div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">公分</div>
                 </div>
                 <div className="relative">
                   <Input
@@ -872,7 +872,7 @@ function PropEditDialog({
                     }
                     placeholder="高"
                   />
-                  <div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">cm</div>
+                  <div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">公分</div>
                 </div>
               </div>
               <div className="mt-1 text-xs text-muted-foreground">提示：此欄位會顯示在前台「尺」圖示旁。</div>
@@ -893,7 +893,7 @@ function PropEditDialog({
           <div className="mt-2 flex flex-col gap-3 rounded-xl border border-border/70 bg-background/15 p-3 md:flex-row md:items-center">
             <div className="w-40 aspect-video overflow-hidden rounded-lg border border-border/70 bg-background/20">
               {draft.thumbnail ? (
-                <img src={draft.thumbnail} alt="thumbnail" className="h-full w-full object-cover" />
+                <img src={draft.thumbnail} alt="縮圖" className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">尚未上傳</div>
               )}
@@ -1298,7 +1298,7 @@ function CaseEditDialog({ item, onSave }: { item: any; onSave: (next: any) => vo
           <div className="mt-2 flex flex-col gap-3 rounded-xl border border-border/70 bg-background/15 p-3 md:flex-row md:items-center">
             <div className="w-40 aspect-video overflow-hidden rounded-lg border border-border/70 bg-background/20">
               {draft.thumbnail ? (
-                <img src={draft.thumbnail} alt="thumbnail" className="h-full w-full object-cover" />
+                <img src={draft.thumbnail} alt="縮圖" className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">尚未上傳</div>
               )}
@@ -1655,7 +1655,7 @@ function ArticleEditDialog({
           <div className="mt-2 flex flex-col gap-3 rounded-xl border border-border/70 bg-background/15 p-3 md:flex-row md:items-center">
             <div className="w-40 aspect-video overflow-hidden rounded-lg border border-border/70 bg-background/20">
               {draft.thumbnail ? (
-                <img src={draft.thumbnail} alt="thumbnail" className="h-full w-full object-cover" />
+                <img src={draft.thumbnail} alt="縮圖" className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">尚未上傳</div>
               )}
@@ -2116,8 +2116,8 @@ function NewsletterManager() {
         </div>
 
         <div className="grid gap-2">
-          <div className="text-xs text-muted-foreground">Email 欄位提示文字</div>
-          <Input value={n.placeholder} onChange={(e) => setN({ placeholder: e.target.value })} placeholder="例如：輸入你的 Email" />
+          <div className="text-xs text-muted-foreground">電子郵件欄位提示文字</div>
+          <Input value={n.placeholder} onChange={(e) => setN({ placeholder: e.target.value })} placeholder="例如：輸入你的電子郵件" />
         </div>
 
         <div className="grid gap-2">
@@ -2166,7 +2166,7 @@ function NewsletterManager() {
         </div>
 
         <div className="grid gap-2">
-          <div className="text-xs text-muted-foreground">搜尋 Email</div>
+          <div className="text-xs text-muted-foreground">搜尋電子郵件</div>
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="例如：gmail" />
         </div>
 
@@ -2174,7 +2174,7 @@ function NewsletterManager() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Email</TableHead>
+                <TableHead>電子郵件</TableHead>
                 <TableHead className="hidden md:table-cell">訂閱時間</TableHead>
                 <TableHead className="hidden md:table-cell">來源</TableHead>
                 <TableHead className="text-right">操作</TableHead>
@@ -2184,7 +2184,7 @@ function NewsletterManager() {
               {filtered.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={4} className="py-10 text-center text-sm text-muted-foreground">
-                    {subs.length === 0 ? "尚無訂閱名單" : "找不到符合的 Email"}
+                    {subs.length === 0 ? "尚無訂閱名單" : "找不到符合的電子郵件"}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -2511,7 +2511,7 @@ function EmailJsManager() {
       <div className="rounded-2xl border border-border/70 bg-card/30 p-5">
         <div className="font-display text-2xl">EmailJS（表單寄信）</div>
         <div className="mt-2 text-sm text-muted-foreground">
-          讓「需求表單 / 詢價單」送出後直接寄到你的 Email（示範版：設定存在本機 localStorage）。
+          讓「需求表單 / 詢價單」送出後直接寄到你的電子郵件（示範版：設定存在本機 localStorage）。
         </div>
       </div>
 
@@ -2527,12 +2527,12 @@ function EmailJsManager() {
         </div>
 
         <div className="grid gap-2">
-          <div className="text-xs text-muted-foreground">Service ID</div>
+          <div className="text-xs text-muted-foreground">Service ID（服務 ID）</div>
           <Input value={s.serviceId ?? ""} onChange={(e) => setS({ serviceId: e.target.value })} placeholder="service_xxx" />
         </div>
 
         <div className="grid gap-2">
-          <div className="text-xs text-muted-foreground">Template ID</div>
+          <div className="text-xs text-muted-foreground">Template ID（範本 ID）</div>
           <Input value={s.templateId ?? ""} onChange={(e) => setS({ templateId: e.target.value })} placeholder="template_xxx" />
           <div className="text-[11px] text-muted-foreground">
             EmailJS 需要 Template ID 才能寄信（你目前已提供 Service ID / Public Key）。
@@ -2540,7 +2540,7 @@ function EmailJsManager() {
         </div>
 
         <div className="grid gap-2">
-          <div className="text-xs text-muted-foreground">Public Key</div>
+          <div className="text-xs text-muted-foreground">Public Key（公開金鑰）</div>
           <Input value={s.publicKey ?? ""} onChange={(e) => setS({ publicKey: e.target.value })} placeholder="public_xxx" />
         </div>
 
@@ -2553,7 +2553,7 @@ function EmailJsManager() {
           <div className="flex items-center justify-between gap-3">
             <div>
               <div className="font-display text-foreground">已成交自動感謝信</div>
-              <div className="mt-1 text-xs text-muted-foreground">後台把名單狀態改為「已成交」時寄給客戶（需客戶有填 Email）</div>
+              <div className="mt-1 text-xs text-muted-foreground">後台把名單狀態改為「已成交」時寄給客戶（需客戶有填電子郵件）</div>
             </div>
             <Button variant={s.thankYouEnabled ? "secondary" : "outline"} onClick={() => setS({ thankYouEnabled: !s.thankYouEnabled })}>
               {s.thankYouEnabled ? "已啟用" : "已停用"}
@@ -2868,7 +2868,7 @@ function QuoteLeadsManager() {
       if (!enabled) {
         toast.message("已成交：感謝信目前未啟用（後台 EmailJS 可開啟）");
       } else if (!toEmail) {
-        toast.message("已成交：此筆名單未填 Email，無法寄送感謝信");
+        toast.message("已成交：此筆名單未填電子郵件，無法寄送感謝信");
       } else if (alreadySent) {
         toast.message("已成交：此筆已寄送過感謝信");
       } else if (!serviceId || !templateId || !publicKey) {
@@ -2967,7 +2967,7 @@ function QuoteLeadsManager() {
           <div>
             <div className="font-display text-2xl">詢價名單</div>
             <div className="mt-2 text-sm text-muted-foreground">
-              以「Email 寄出成功」為準寫入（本機 localStorage）。可更新狀態、搜尋、匯出 CSV。
+              以「電子郵件寄出成功」為準寫入（本機 localStorage）。可更新狀態、搜尋、匯出 CSV。
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -2983,7 +2983,7 @@ function QuoteLeadsManager() {
         <div className="mt-4 grid gap-3 md:grid-cols-[1fr_220px]">
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="搜尋：公司 / 聯絡人 / 電話 / Email / 縣市" className="pl-9" />
+            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="搜尋：公司 / 聯絡人 / 電話 / 電子郵件 / 縣市" className="pl-9" />
           </div>
           <Select value={status} onValueChange={setStatus}>
             <SelectTrigger>
@@ -3018,7 +3018,7 @@ function QuoteLeadsManager() {
             {filtered.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} className="py-12 text-center text-sm text-muted-foreground">
-                  尚無名單。請先在前台送出詢價（Email 寄出成功）後再查看。
+                  尚無名單。請先在前台送出詢價（電子郵件寄出成功）後再查看。
                 </TableCell>
               </TableRow>
             ) : (
@@ -3054,7 +3054,7 @@ function QuoteLeadsManager() {
                           `公司：${l.company}`,
                           `聯絡人：${l.name}`,
                           l.phone ? `電話：${l.phone}` : "",
-                          l.email ? `Email：${l.email}` : "",
+                          l.email ? `電子郵件：${l.email}` : "",
                           `道具件數：${Number(l.itemsCount ?? 0)}`,
                           `地點：${[l.city, l.district].filter(Boolean).join(" ") || "未填"}`,
                           `狀態：${l.status}`,

@@ -25,12 +25,12 @@ export default class ErrorBoundary extends React.Component<Props, State> {
         this.props.fallback || (
           <div className="min-h-screen flex items-center justify-center">
             <div className="text-center">
-              <h1 className="text-2xl font-bold">Something went wrong</h1>
+              <h1 className="text-2xl font-bold">發生錯誤</h1>
               <button
                 onClick={() => window.location.reload()}
                 className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md"
               >
-                Reload Page
+                重新載入頁面
               </button>
             </div>
           </div>

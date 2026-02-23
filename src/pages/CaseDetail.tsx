@@ -60,7 +60,7 @@ export default function CaseDetail({ id }: { id: string }) {
 
   return (
     <SiteLayout>
-      <PageBanner image={banner} kicker="CASES" title={c.title} subtitle={c.highlight} />
+      <PageBanner image={banner} kicker="案例" title={c.title} subtitle={c.highlight} />
 
       <section className="mx-auto max-w-6xl px-4 py-10">
         <div className="flex flex-wrap items-center gap-3">

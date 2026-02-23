@@ -73,11 +73,11 @@ export default function Contact() {
 
   const submit = async () => {
     if (!company.trim() || !name.trim() || (!phone.trim() && !email.trim())) {
-      toast.error("請至少填寫：公司名稱、聯絡人，以及連絡電話或 EMAIL");
+      toast.error("請至少填寫：公司名稱、聯絡人，以及連絡電話或電子郵件");
       return;
     }
     if (email.trim() && !isValidEmail(email)) {
-      toast.error("EMAIL 格式似乎不正確");
+      toast.error("電子郵件格式似乎不正確");
       return;
     }
     if (phone.trim() && !isValidPhone(phone)) {
@@ -145,7 +145,7 @@ export default function Contact() {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="CONTACT"
+        kicker="聯絡"
         title="聯絡怪獸"
         subtitle="把活動資訊丟過來，我們用『道具＋執行』角度幫你把風險先踩掉。"
       />
@@ -160,18 +160,18 @@ export default function Contact() {
                 <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">
                   <div className="grid gap-2">
                     <div className="inline-flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-accent" /> TEL：02-8228-1181
+                      <Phone className="h-4 w-4 text-accent" /> 電話：02-8228-1181
                     </div>
                     <div className="inline-flex items-center gap-2">
-                      <Printer className="h-4 w-4 text-accent" /> FAX：02-8228-2686
+                      <Printer className="h-4 w-4 text-accent" /> 傳真：02-8228-2686
                     </div>
                     <div className="inline-flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-accent" /> EMAIL：willie1225@yahoo.com.tw
+                      <Mail className="h-4 w-4 text-accent" /> 電子郵件：willie1225@yahoo.com.tw
                     </div>
                   </div>
 
                   <div className="rounded-xl border border-border/70 bg-white/95 p-2">
-                    <img src={lineQr} alt="LINE QR Code" className="h-28 w-28" />
+                    <img src={lineQr} alt="LINE QR碼" className="h-28 w-28" />
                     <div className="mt-2 text-center text-xs text-muted-foreground">
                       掃碼加入 LINE 或
                       <a className="underline underline-offset-4" href="https://line.me/ti/p/idasr_y8A9" target="_blank" rel="noreferrer">點此加入</a>
@@ -225,7 +225,7 @@ export default function Contact() {
                 <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="3. 聯絡人*" />
                 <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="4. 連絡電話（擇一）" />
               </div>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="5. EMAIL（擇一）" />
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="5. 電子郵件（擇一）" />
               <Input value={eventName} onChange={(e) => setEventName(e.target.value)} placeholder="6. 活動名稱" />
               <div className="grid gap-3 md:grid-cols-2">
                 <Input value={inAt} onChange={(e) => setInAt(e.target.value)} placeholder="7. 進場日期跟時間（例：2026/03/01 13:00）" />

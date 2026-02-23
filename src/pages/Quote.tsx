@@ -120,8 +120,8 @@ export default function Quote() {
       missing.push("3. 聯絡人（必填）");
     }
     if (!phone.trim() && !email.trim()) {
-      nextErrors.contact = "請填寫電話或 EMAIL（擇一）";
-      missing.push("4. 連絡電話 / EMAIL（擇一必填）");
+      nextErrors.contact = "請填寫電話或電子郵件（擇一）";
+      missing.push("4. 連絡電話 / 電子郵件（擇一必填）");
     }
 
     const riskMissing: string[] = [];
@@ -169,8 +169,8 @@ export default function Quote() {
 "), { duration: 6000 });
     }
     if (email.trim() && !isValidEmail(email)) {
-      setErrors((prev) => ({ ...prev, email: "EMAIL 格式似乎不正確" }));
-      toast.error("EMAIL 格式似乎不正確");
+      setErrors((prev) => ({ ...prev, email: "電子郵件格式似乎不正確" }));
+      toast.error("電子郵件格式似乎不正確");
       emailRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
       emailRef.current?.focus();
       return;
@@ -338,7 +338,7 @@ export default function Quote() {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="QUOTE CART"
+        kicker="詢價清單"
         title="詢價單"
         subtitle="先挑道具，再把活動資訊一次講清楚；這不是結帳，是報價與建議的流程。"
       />
@@ -506,7 +506,7 @@ export default function Quote() {
                       value={phone}
                       onChange={(e) => {
                         setPhone(e.target.value);
-                        if (showErrors) setErrors((prev) => ({ ...prev, contact: (e.target.value.trim() || email.trim()) ? undefined : "請填寫電話或 EMAIL（擇一）", phone: undefined }));
+                        if (showErrors) setErrors((prev) => ({ ...prev, contact: (e.target.value.trim() || email.trim()) ? undefined : "請填寫電話或電子郵件（擇一）", phone: undefined }));
                       }}
                       placeholder="4. 連絡電話（擇一）"
                       className={(showErrors && (errors.contact || errors.phone)) ? "border-red-500/50 focus-visible:ring-red-500" : ""}
@@ -523,9 +523,9 @@ export default function Quote() {
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
-                      if (showErrors) setErrors((prev) => ({ ...prev, contact: (phone.trim() || e.target.value.trim()) ? undefined : "請填寫電話或 EMAIL（擇一）", email: undefined }));
+                      if (showErrors) setErrors((prev) => ({ ...prev, contact: (phone.trim() || e.target.value.trim()) ? undefined : "請填寫電話或電子郵件（擇一）", email: undefined }));
                     }}
-                    placeholder="5. EMAIL（擇一）"
+                    placeholder="5. 電子郵件（擇一）"
                     className={(showErrors && (errors.contact || errors.email)) ? "border-red-500/50 focus-visible:ring-red-500" : ""}
                   />
                   {showErrors && errors.contact ? (
@@ -678,7 +678,7 @@ export default function Quote() {
                     {errors.name ? <div>• 聯絡人：{errors.name}</div> : null}
                     {errors.contact ? <div>• 聯絡方式：{errors.contact}</div> : null}
                     {errors.phone ? <div>• 電話：{errors.phone}</div> : null}
-                    {errors.email ? <div>• EMAIL：{errors.email}</div> : null}
+                    {errors.email ? <div>• 電子郵件：{errors.email}</div> : null}
                   </div>
                 </button>
               ) : null}
@@ -693,7 +693,7 @@ export default function Quote() {
               </Button>
 
               <div className="mt-3 rounded-xl border border-border/70 bg-background/20 p-4 text-xs text-muted-foreground">
-                提醒：正式上線會串接 Email/LINE 通知、後台名單管理、以及匯出 Excel。
+                提醒：正式上線會串接 電子郵件/LINE 通知、後台名單管理、以及匯出 Excel。
               </div>
 
               {lines.length ? (

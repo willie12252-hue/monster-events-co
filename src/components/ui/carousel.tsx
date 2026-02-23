@@ -120,7 +120,7 @@ function Carousel({
         onKeyDownCapture={handleKeyDown}
         className={cn("relative", className)}
         role="region"
-        aria-roledescription="carousel"
+        aria-roledescription="輪播"
         data-slot="carousel"
         {...props}
       >
@@ -194,7 +194,7 @@ function CarouselPrevious({
       {...props}
     >
       <ArrowLeft />
-      <span className="sr-only">Previous slide</span>
+      <span className="sr-only">上一張</span>
     </Button>
   )
 }
@@ -224,7 +224,7 @@ function CarouselNext({
       {...props}
     >
       <ArrowRight />
-      <span className="sr-only">Next slide</span>
+      <span className="sr-only">下一張</span>
     </Button>
   )
 }

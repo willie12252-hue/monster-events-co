@@ -169,9 +169,9 @@ export default function SiteLayout({
             <div className="font-display text-base text-foreground">聯絡資訊</div>
             <div className="mt-2 flex flex-col gap-3">
               <div className="flex flex-col gap-1">
-                <div className="inline-flex items-center gap-2"><Phone className="h-4 w-4 text-accent" />TEL：02-8228-1181</div>
-                <div className="inline-flex items-center gap-2"><Printer className="h-4 w-4 text-accent" />FAX：02-8228-2686</div>
-                <div className="inline-flex items-center gap-2"><Mail className="h-4 w-4 text-accent" />EMAIL：willie1225@yahoo.com.tw</div>
+                <div className="inline-flex items-center gap-2"><Phone className="h-4 w-4 text-accent" />電話：02-8228-1181</div>
+                <div className="inline-flex items-center gap-2"><Printer className="h-4 w-4 text-accent" />傳真：02-8228-2686</div>
+                <div className="inline-flex items-center gap-2"><Mail className="h-4 w-4 text-accent" />電子郵件：willie1225@yahoo.com.tw</div>
                 <div className="inline-flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 text-accent" /><span>新北市中和區國光街112巷23弄24號1樓</span></div>
               </div>
 
@@ -181,7 +181,7 @@ export default function SiteLayout({
                   <div className="mt-1">掃碼加入（或到聯絡頁點連結）</div>
                 </div>
                 <div className="rounded-lg border border-border/70 bg-white/95 p-2">
-                  <img src={lineQr} alt="LINE QR Code" className="h-24 w-24" />
+                  <img src={lineQr} alt="LINE QR碼" className="h-24 w-24" />
                 </div>
               </div>
 
@@ -189,7 +189,7 @@ export default function SiteLayout({
           </div>
         </div>
         <div className="border-t border-border/70 py-4 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Monster Events Co.
+          © {new Date().getFullYear()} 怪獸道具工廠
         </div>
       </footer>
     </div>

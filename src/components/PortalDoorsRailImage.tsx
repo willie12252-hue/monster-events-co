@@ -118,7 +118,7 @@ export default function PortalDoorsRailImage({
         <img
           className="portal-ref-img"
           src={bg}
-          alt="Portal Doors rail background"
+          alt="門軌分類背景"
           loading="eager"
           decoding="sync"
           fetchPriority="high"

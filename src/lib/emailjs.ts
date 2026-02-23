@@ -42,7 +42,7 @@ export function buildQuoteEmailMessage(p: Omit<QuoteEmailPayload, "message" | "s
     p.vat ? `統編：${p.vat}` : "",
     `聯絡人：${p.name || ""}`,
     p.phone ? `電話：${p.phone}` : "",
-    p.email ? `Email：${p.email}` : "",
+    p.email ? `電子郵件：${p.email}` : "",
     "",
     p.eventName ? `活動名稱：${p.eventName}` : "",
     p.inAt ? `進場：${p.inAt}` : "",

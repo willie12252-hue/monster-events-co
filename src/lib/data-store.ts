@@ -127,7 +127,7 @@ export function getDefaultData(): AppData {
       enabled: true,
       title: "訂閱怪獸電子報",
       subtitle: "每週一封：提案話術、避雷清單、最新案例節奏。",
-      placeholder: "輸入你的 Email",
+      placeholder: "輸入你的電子郵件",
       buttonText: "訂閱",
       consentText: "我同意接收電子報（可隨時取消）",
     },

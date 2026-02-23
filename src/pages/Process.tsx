@@ -41,7 +41,7 @@ export default function Process() {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="PROCESS"
+        kicker="流程"
         title="合作流程"
         subtitle="把流程拆清楚：你知道什麼時候提供什麼資料，我們也知道什麼時候該做什麼。"
       />

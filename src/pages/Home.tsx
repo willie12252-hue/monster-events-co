@@ -248,7 +248,7 @@ export default function Home() {
         <div className="pointer-events-none absolute -top-10 left-1/2 h-24 w-[120%] -translate-x-1/2 bg-gradient-to-r from-accent/0 via-accent/15 to-accent/0 blur-2xl" />
 
         <motion.div variants={reveal} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.35 }}>
-          <SectionTitle kicker="PORTAL DOORS" title="挑一扇門，尋找讓客戶尖叫的神兵利器!" />
+          <SectionTitle kicker="傳送門" title="挑一扇門，尋找讓客戶尖叫的神兵利器!" />
         </motion.div>
 
         <motion.div
@@ -320,7 +320,7 @@ export default function Home() {
       {/* KNOWLEDGE */}
       <section className="mx-auto max-w-6xl px-4 py-14">
         <motion.div variants={reveal} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.35 }}>
-          <SectionTitle kicker="KNOWLEDGE" title="怪獸情報局：讓你的提案更穩" />
+          <SectionTitle kicker="情報局" title="怪獸情報局：讓你的提案更穩" />
         </motion.div>
 
         <motion.div
@@ -356,7 +356,7 @@ export default function Home() {
         <section className="mx-auto max-w-6xl px-4 pb-14">
           <motion.div variants={reveal} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.35 }}>
             <div className="rounded-2xl border border-border/70 bg-card/30 p-5">
-              <div className="font-display text-sm tracking-widest text-muted-foreground">VIDEO</div>
+              <div className="font-display text-sm tracking-widest text-muted-foreground">影片</div>
               <h2 className="mt-2 font-display text-3xl text-[#abf95f] md:text-4xl">{homeVideo.title || "影片"}</h2>
               {homeVideo.subtitle ? <p className="mt-2 text-sm text-muted-foreground md:text-base">{homeVideo.subtitle}</p> : null}
             </div>
@@ -369,7 +369,7 @@ export default function Home() {
                 <iframe
                   className="h-full w-full"
                   src={toYouTubeEmbedUrl(homeVideo.youtubeUrl || "")}
-                  title={homeVideo.title || "YouTube"}
+                  title={homeVideo.title || "YouTube 影片"}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
