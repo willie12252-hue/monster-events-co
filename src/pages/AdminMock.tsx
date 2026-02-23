@@ -165,7 +165,7 @@ export default function AdminMock() {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="ADMIN"
+        kicker="管理後台"
         title="管理員後台"
         subtitle="管理：道具軍火庫／近期案例／怪獸情報局（文章）。"
       />

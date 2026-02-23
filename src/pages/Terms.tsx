@@ -11,7 +11,7 @@ export default function Terms() {
     <SiteLayout>
       <section className="mx-auto max-w-6xl px-4 py-10">
         <motion.div variants={reveal} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.35 }}>
-          <div className="font-display text-sm tracking-widest text-muted-foreground">TERMS</div>
+          <div className="font-display text-sm tracking-widest text-muted-foreground">租借條款</div>
           <h1 className="mt-2 font-display text-4xl">租借條款（簡版示意）</h1>
           <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
             這是原型站的「簡版條款」示意。正式上線建議由實際作業流程反推條款，並交由法務檢視。

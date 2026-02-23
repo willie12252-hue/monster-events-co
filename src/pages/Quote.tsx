@@ -338,7 +338,7 @@ export default function Quote() {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="QUOTE CART"
+        kicker="詢價清單"
         title="詢價單"
         subtitle="先挑道具，再把活動資訊一次講清楚；這不是結帳，是報價與建議的流程。"
       />

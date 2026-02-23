@@ -107,7 +107,7 @@ toast.success("已完成訂閱！");
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="MONSTER INTEL"
+        kicker="怪獸情報"
         title="怪獸情報局"
         subtitle="把客戶最常問的風險與避雷先寫好，提案會更穩、成交會更快。"
       />

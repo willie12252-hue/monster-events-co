@@ -60,7 +60,7 @@ export default function CaseDetail({ id }: { id: string }) {
 
   return (
     <SiteLayout>
-      <PageBanner image={banner} kicker="CASES" title={c.title} subtitle={c.highlight} />
+      <PageBanner image={banner} kicker="精選案例" title={c.title} subtitle={c.highlight} />
 
       <section className="mx-auto max-w-6xl px-4 py-10">
         <div className="flex flex-wrap items-center gap-3">
@@ -82,7 +82,7 @@ export default function CaseDetail({ id }: { id: string }) {
             <div className="flex items-center justify-between border-b border-border/70 bg-background/20 px-4 py-3">
               <div className="font-display">案例影片</div>
               <div className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                <PlayCircle className="h-4 w-4" /> YouTube
+                <PlayCircle className="h-4 w-4" /> 影片
               </div>
             </div>
             <div className="aspect-video">

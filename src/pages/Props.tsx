@@ -110,7 +110,7 @@ export default function Props() {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="ARMORY"
+        kicker="軍火庫"
         title="道具軍火庫"
         subtitle="挑道具之前，先把場地/時間/動線想清楚；報價會更準、執行風險更低。"
         glow="on"

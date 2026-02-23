@@ -145,7 +145,7 @@ export default function Contact() {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="CONTACT"
+        kicker="聯絡我們"
         title="聯絡怪獸"
         subtitle="把活動資訊丟過來，我們用『道具＋執行』角度幫你把風險先踩掉。"
       />
@@ -160,13 +160,13 @@ export default function Contact() {
                 <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">
                   <div className="grid gap-2">
                     <div className="inline-flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-accent" /> TEL：02-8228-1181
+                      <Phone className="h-4 w-4 text-accent" /> 電話：02-8228-1181
                     </div>
                     <div className="inline-flex items-center gap-2">
-                      <Printer className="h-4 w-4 text-accent" /> FAX：02-8228-2686
+                      <Printer className="h-4 w-4 text-accent" /> 傳真：02-8228-2686
                     </div>
                     <div className="inline-flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-accent" /> EMAIL：willie1225@yahoo.com.tw
+                      <Mail className="h-4 w-4 text-accent" /> 信箱：willie1225@yahoo.com.tw
                     </div>
                   </div>
 

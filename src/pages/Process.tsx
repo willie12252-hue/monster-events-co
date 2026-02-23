@@ -41,7 +41,7 @@ export default function Process() {
     <SiteLayout>
       <PageBanner
         image={banner}
-        kicker="PROCESS"
+        kicker="合作流程"
         title="合作流程"
         subtitle="把流程拆清楚：你知道什麼時候提供什麼資料，我們也知道什麼時候該做什麼。"
       />
@@ -57,7 +57,7 @@ export default function Process() {
                     <s.icon className="relative h-7 w-7" />
                   </div>
                   <div>
-                    <div className="text-xs tracking-widest text-muted-foreground">STEP {String(i + 1).padStart(2, "0")}</div>
+                    <div className="text-xs tracking-widest text-muted-foreground">步驟 {String(i + 1).padStart(2, "0")}</div>
                     <div className="mt-2 font-display text-2xl">{s.title}</div>
                     <div className="mt-2 text-sm text-muted-foreground">{s.desc}</div>
                   </div>
