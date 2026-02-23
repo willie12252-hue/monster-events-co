@@ -248,7 +248,7 @@ export default function Home() {
         <div className="pointer-events-none absolute -top-10 left-1/2 h-24 w-[120%] -translate-x-1/2 bg-gradient-to-r from-accent/0 via-accent/15 to-accent/0 blur-2xl" />
 
         <motion.div variants={reveal} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.35 }}>
-          <SectionTitle kicker="PORTAL DOORS" title="挑一扇門，尋找讓客戶尖叫的神兵利器!" />
+          <SectionTitle kicker="任意門" title="挑一扇門，尋找讓客戶尖叫的神兵利器!" />
         </motion.div>
 
         <motion.div
@@ -320,7 +320,7 @@ export default function Home() {
       {/* KNOWLEDGE */}
       <section className="mx-auto max-w-6xl px-4 py-14">
         <motion.div variants={reveal} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.35 }}>
-          <SectionTitle kicker="KNOWLEDGE" title="怪獸情報局：讓你的提案更穩" />
+          <SectionTitle kicker="怪獸情報局" title="怪獸情報局：讓你的提案更穩" />
         </motion.div>
 
         <motion.div
